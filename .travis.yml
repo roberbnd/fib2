@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t roberbnd/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true roberbnd/react-test npm test
+  # - docker run roberbnd/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t roberbnd/multi-client ./client
+  - docker build -t roberbnd/multi-nginx ./nginx
+  - docker build -t roberbnd/multi-server ./server
+  - docker build -t roberbnd/multi-worker ./worker
+  # Log in to the docker cli
+  - echo  "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take those images and push them to docker hub
+  - docker push roberbnd/multi-client
+  - docker push roberbnd/multi-nginx
+  - docker push roberbnd/multi-server
+  - docker push roberbnd/multi-worker
