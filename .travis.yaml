@@ -21,11 +21,6 @@ before_install:
 script:
     - docker run -e CI=true roberbnd/react-test npm run test
 
-#deploy:
-    #provinder: gae
-    #keyfile: service-account.json
-    #project: newWorld
-
 deploy:
     provider: script
     script: bash ./deploy.sh
