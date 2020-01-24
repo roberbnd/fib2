@@ -19,7 +19,7 @@ before_install:
     - docker build -t roberbnd/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-    - docker run CI=true roberbnd/react-test npm test
+    - docker run -e CI=true roberbnd/react-test npm test
 
 deploy:
     provider: script
